@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../widgets/calendar_widget.dart';
 import '../widgets/info_widget.dart';
 import 'details_screen.dart';
+import 'settings_screen.dart';
+import '../models/user_info.dart';
 
 class MenstrualTrackerScreen extends StatefulWidget {
   @override
@@ -12,6 +14,18 @@ class _MenstrualTrackerScreenState extends State<MenstrualTrackerScreen> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _startDate;
   DateTime? _endDate;
+  UserInfo _userInfo = UserInfo(
+    firstName: 'John',
+    lastName: 'Doe',
+    cycleLength: 28,
+    periodDays: [],
+  );
+
+  void _updateUserInfo(UserInfo userInfo) {
+    setState(() {
+      _userInfo = userInfo;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +33,21 @@ class _MenstrualTrackerScreenState extends State<MenstrualTrackerScreen> {
       appBar: AppBar(
         title: const Text('Suivi des menstruations'),
         backgroundColor: Colors.pinkAccent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SettingsScreen(
+                    userInfo: _userInfo,
+                    onSave: _updateUserInfo,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
